@@ -4,25 +4,51 @@ public class CustomerDAO implements CustomerDAOInterface {
 	String temp = "To stop the red crosses from appearing.";
 	Connection connection = DBConnector.getConnection();
 	PreparedStatement prep;
-	ResultSet result;	
+	ResultSet result;
+	Customer found = new Customer();
+	
 	
 	public static void main(String[] args) {
 		CustomerDAO tryout = new CustomerDAO();
-		tryout.newCustomer();
-		System.out.println("Hopefully added the Kangoo now.");
+		Customer vroomer = new Customer();
+		Address address = new Address();
+		address.setStreetname("vroomRoad");
+		address.setHouseNumber(5);
+		address.setPostalCode("9876SB");
+		address.setPlaceOfResidence("DriveTown");
+		vroomer.setAddress(address);
+		vroomer.setFirstName("Kangoo");
+		vroomer.setLastName("Renault");
+		vroomer.setEmailAddress("jumpyjumpjump@hotmail.com");
+		//tryout.newCustomer(vroomer);
+		//System.out.println("Customer has been succesfully added.");
+		Customer tester = new Customer();
+		Address testing = new Address();
+		tester.setCustomerId(2);
+		tester.setFirstName("Kangoo");
+		tester.setLastName("Renault");
+		tester.setEmailAddress("vroomvromvromvroom@gmail.com");
+		testing.setStreetname("Putterstreet");
+		testing.setHouseNumber(2);
+		testing.setPlaceOfResidence("Cruise City");
+		testing.setPostalCode("1234ET");
+		tester.setAddress(testing);
+		
+		tryout.deleteCustomerWithFullName(tester);
+		//tryout.setCustome
 	}
 	
 	//create
-			public void newCustomer() {
-				try{prep = connection.prepareStatement("insert into Customer (firstName, lastName, email, streetName," +
+			public void newCustomer(Customer newCustomer) {
+				try{	prep = connection.prepareStatement("insert into Customer (firstName, lastName, email, streetName," +
 					   "houseNumber, postalCode, residence) values (?, ?, ?, ?, ?, ?, ?)");
-				prep.setString(1, "Renault");
-				prep.setString(2, "Kangoo");
-				prep.setString(3, "jumpyjumpjump@hotmail.com");
-				prep.setString(4, "vroomRoad");
-				prep.setInt(5, 5);
-				prep.setString(6, "9876SB");
-				prep.setString(7, "DriveTown");
+				prep.setString(1, newCustomer.getFirstName());
+				prep.setString(2, newCustomer.getLastName());
+				prep.setString(3, newCustomer.getEmailAddress());
+				prep.setString(4, newCustomer.getAddress().getStreetname());
+				prep.setInt(5, newCustomer.getAddress().getHouseNumber());
+				prep.setString(6, newCustomer.getAddress().getPostalCode());
+				prep.setString(7, newCustomer.getAddress().getPlaceOfResidence());
 				prep.executeUpdate();
 				//result = prep.executeQuery();
 				}
@@ -32,35 +58,147 @@ public class CustomerDAO implements CustomerDAOInterface {
 			}
 			
 	//read
-	public String findCustomerWithId() {
-		return temp;
+	public Customer findCustomerWithId(int id) {
+		try {
+			prep = connection.prepareStatement("select * from Customer where CustomerId = ?");
+			prep.setInt(1, id);
+			result = prep.executeQuery();
+			result.last();
+			System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
+			found.setFirstName(result.getString("firstName"));
+			found.setLastName(result.getString("lastName"));
+			found.setCustomerId(result.getInt("customerId"));
+			found.setEmailAddress(result.getString("email"));
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return found;
 	}
-		public String findCustomerWithLastName() {
-			return temp;
+		public Customer findCustomerWithLastName(String lastName) {
+			try {
+				prep = connection.prepareStatement("select * from Customer where lastName = ?");
+				prep.setString(1, lastName);
+				result = prep.executeQuery();
+				result.last();
+				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
+				found.setFirstName(result.getString("firstName"));
+				found.setLastName(result.getString("lastName"));
+				found.setCustomerId(result.getInt("customerId"));
+				found.setEmailAddress(result.getString("email"));
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			return found;
 		}
-		public String findCustomerWithFullName() {
-			return temp;
+		public Customer findCustomerWithFullName(String firstName, String lastName) {
+			try {
+				prep = connection.prepareStatement("select * from Customer where firstName = ? and lastName = ?");
+				prep.setString(1, firstName);
+				prep.setString(2, lastName);
+				result = prep.executeQuery();
+				result.last();
+				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
+				found.setFirstName(result.getString("firstName"));
+				found.setLastName(result.getString("lastName"));
+				found.setCustomerId(result.getInt("customerId"));
+				found.setEmailAddress(result.getString("email"));
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			return found;
 		}
-		public String findCustomerWithEmail() {
-			return temp;
+		public Customer findCustomerWithEmail(String email) {
+			try {
+				prep = connection.prepareStatement("select * from Customer where email = ?");
+				prep.setString(1, email);
+				result = prep.executeQuery();
+				result.last();
+				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
+				found.setFirstName(result.getString("firstName"));
+				found.setLastName(result.getString("lastName"));
+				found.setCustomerId(result.getInt("customerId"));
+				found.setEmailAddress(result.getString("email"));
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			return found;
 		}
 		
 		//update
-		public void setCustomerFullName(int id) {
-			
+		public void setCustomerFullName(Customer customer) {
+			try {
+				prep = connection.prepareStatement("update Customer set firstName = ?, middleName = ?, lastName = ? where Customerid = ?");
+				prep.setString(1, customer.getFirstName());
+				prep.setString(2, customer.getMiddleName());
+				prep.setString(3, customer.getLastName());
+				prep.setInt(4, customer.getCustomerId());
+				prep.executeUpdate();
+				System.out.println("Name has been updated.");
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
-		public void setCustomerAddress(int id) {
-			
+		public void setCustomerAddress(Customer customer) {
+			try {
+				prep = connection.prepareStatement("update Customer set streetName = ?, houseNumber = ?, postalCode = ?, residence = ? where Customerid = ?");
+				prep.setString(1, customer.getAddress().getStreetname());
+				prep.setInt(2, customer.getAddress().getHouseNumber());
+				prep.setString(3, customer.getAddress().getPostalCode());
+				prep.setString(4, customer.getAddress().getPlaceOfResidence());
+				prep.setInt(5, customer.getCustomerId());
+				prep.executeUpdate();
+				System.out.println("Address has been updated");
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
-		public void setCustomerEmail(int id) {
-			
+		public void setCustomerEmail(Customer customer) {
+			try {
+				prep = connection.prepareStatement("update Customer set email = ? where Customerid = ?");
+				prep.setString(1, customer.getEmailAddress());
+				prep.setInt(2, customer.getCustomerId());
+				prep.executeUpdate();
+				System.out.println("Email has been updated.");
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 		//delete
-		public boolean deleteCustomer(int id) {
-			boolean succes = false;
-			
-			return succes;
+		public void deleteCustomerWithId(Customer customer) {
+			try {
+				prep = connection.prepareStatement("delete from Customer where Customerid = ?");
+				prep.setInt(1, customer.getCustomerId());
+				prep.executeUpdate();
+				System.out.println("Customer has been removed from the database.");
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		public void deleteCustomerWithFullName(Customer customer) {
+			try {
+				prep = connection.prepareStatement("delete from Customer where firstName = ? and lastName = ?");
+				prep.setString(1, customer.getFirstName());
+				prep.setString(2, customer.getLastName());
+				prep.executeUpdate();
+				System.out.println("Customer has been removed from the database.");
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 }

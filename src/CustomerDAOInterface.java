@@ -1,20 +1,21 @@
 
 public interface CustomerDAOInterface {
 	//create
-	public abstract void newCustomer();
+	public abstract void newCustomer(Customer newCustomer);
 	
 	//read
-	public abstract String findCustomerWithId();
-	public abstract String findCustomerWithLastName();
-	public abstract String findCustomerWithFullName();
-	public abstract String findCustomerWithEmail();
+	public abstract Customer findCustomerWithId(int id);
+	public abstract Customer findCustomerWithLastName(String lastName);
+	public abstract Customer findCustomerWithFullName(String fullName, String lastName);
+	public abstract Customer findCustomerWithEmail(String email);
 	
 	//update
-	public abstract void setCustomerFullName(int id);
-	public abstract void setCustomerAddress(int id);
-	public abstract void setCustomerEmail(int id);
+	public abstract void setCustomerFullName(Customer customer);
+	public abstract void setCustomerAddress(Customer customer);
+	public abstract void setCustomerEmail(Customer customer);
 	
 	//delete
-	public abstract boolean deleteCustomer(int id);
+	public abstract void deleteCustomerWithId(Customer customer);
+	public abstract void deleteCustomerWithFullName(Customer customer);
 	
 }
