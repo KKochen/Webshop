@@ -1,7 +1,6 @@
 import java.sql.*;
 
 public class CustomerDAO implements CustomerDAOInterface {
-	String temp = "To stop the red crosses from appearing.";
 	Connection connection = DBConnector.getConnection();
 	PreparedStatement prep;
 	ResultSet result;
@@ -20,8 +19,8 @@ public class CustomerDAO implements CustomerDAOInterface {
 		vroomer.setFirstName("Kangoo");
 		vroomer.setLastName("Renault");
 		vroomer.setEmailAddress("jumpyjumpjump@hotmail.com");
-		//tryout.newCustomer(vroomer);
-		//System.out.println("Customer has been succesfully added.");
+		tryout.newCustomer(vroomer);
+		/*System.out.println("Customer has been succesfully added.");
 		Customer tester = new Customer();
 		Address testing = new Address();
 		tester.setCustomerId(2);
@@ -35,7 +34,7 @@ public class CustomerDAO implements CustomerDAOInterface {
 		tester.setAddress(testing);
 		
 		tryout.deleteCustomerWithFullName(tester);
-		//tryout.setCustome
+		*/
 	}
 	
 	//create
@@ -50,7 +49,6 @@ public class CustomerDAO implements CustomerDAOInterface {
 				prep.setString(6, newCustomer.getAddress().getPostalCode());
 				prep.setString(7, newCustomer.getAddress().getPlaceOfResidence());
 				prep.executeUpdate();
-				//result = prep.executeQuery();
 				}
 				catch(SQLException ex) {
 					ex.printStackTrace();
