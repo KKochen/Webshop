@@ -2,9 +2,9 @@
 public class Order {
 	private int orderId;
 	private int customerId;
-	private Article article1;
-	private Article article2;
-	private Article article3;
+	private boolean invoice;
+	private int articleId;
+	private int articleAmount;
 
 	public int getOrderId() {
 		return orderId;
@@ -22,27 +22,27 @@ public class Order {
 		this.customerId = id;
 	}
 	
-	public Article getArticle1() {
-		return article1;
+	public boolean isInvoice() {
+		return invoice;
 	}
 	
-	public void setArticle1(Article a1) {
-		this.article1 = a1;
+	public void setInvoice(boolean invoice) {
+		this.invoice = invoice;
 	}
 	
-	public Article getArticle2() {
-		return article2;
+	public int getArticleAmount() {
+		return articleAmount;
 	}
 	
-	public void setArticle2(Article a2) {
-		this.article2 = a2;
+	public void setArticleAmount(int amount) {
+		this.articleAmount = amount;
 	}
 	
-	public Article getArticle3() {
-		return article3;
+	public int getArticleId() {
+		return articleId;
 	}
 	
-	public void setArticle3(Article a3) {
-		this.article3 = a3;
+	public void setArticleId(int id) {
+		this.articleId = id;
 	}
 }

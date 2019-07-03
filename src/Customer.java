@@ -5,7 +5,6 @@ public class Customer {
 	private String middleName;
 	private String lastName;
 	private String emailAddress;
-	private Address address;
 	
 	public int getCustomerId() {
 		return customerId;
@@ -45,13 +44,5 @@ public class Customer {
 	
 	public void setEmailAddress(String email) {
 		this.emailAddress = email;
-	}
-	
-	public Address getAddress() {
-		return address;
-	}
-	
-	public void setAddress(Address address) {
-		this.address = address;
 	}
 }

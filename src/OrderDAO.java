@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class OrderDAO {
 	Connection connection = DBConnector.getConnection();
@@ -13,37 +10,34 @@ public class OrderDAO {
 	public static void main(String[] args) {
 		OrderDAO tryout = new OrderDAO();
 		Order order = new Order();
+		order.setCustomerId(1);
+		order.setOrderId(2);
+		order.setInvoice(true);
 		Article article1 = new Article();
 		article1.setArticleId(1);
 		article1.setArticleName("TurtleWax");
 		article1.setArticleAmount(1);
 		article1.setArticlePrice(5.95);
-		order.setArticle1(article1);
-		order.setCustomerId(4);
 		Order testing = new Order();
+		testing.setOrderId(2);
+		testing.setCustomerId(1);
 		Article a2 = new Article();
-		a2.setArticleId(2);
+		a2.setArticleId(1);
 		a2.setArticleName("Car shampoo");
 		a2.setArticleAmount(2);
 		a2.setArticlePrice(7.9);
-		testing.setOrderId(2);
-		testing.setCustomerId(4);
-		testing.setArticle1(a2);
-		
+
 		//tryout.createOrder(order);
-		//tryout.changeArticle(testing);
+		tryout.removeOrderWithId(order);
 	}
 	//create
 		public void createOrder(Order order) {
 			try {
-				prep = connection.prepareStatement("insert into Orders (customerId, articleId1, articleName1," +
-				"articleAmount1, articlePrice1) values (?, ?, ?, ?, ?)");
+				prep = connection.prepareStatement("insert into Orders (customerId, invoice) values (?, ?)");
 				prep.setInt(1, order.getCustomerId());
-				prep.setInt(2, order.getArticle1().getArticleId());
-				prep.setString(3, order.getArticle1().getArticleName());
-				prep.setInt(4, order.getArticle1().getArticleAmount());
-				prep.setDouble(5, order.getArticle1().getArticlePrice());
+				prep.setBoolean(2, order.isInvoice());
 				prep.executeUpdate();
+				System.out.println("Order has been created.");
 				}
 				catch(SQLException ex) {
 					ex.printStackTrace();
@@ -56,15 +50,10 @@ public class OrderDAO {
 				prep.setInt(1, order.getOrderId());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getInt("OrderId") + " " + result.getString("articleName1"));
-				Article a1 = new Article();
-				a1.setArticleId(result.getInt("articleId1"));
-				a1.setArticleName(result.getString("articleName1"));
-				a1.setArticleAmount(result.getInt("ArticleAmount1"));
-				a1.setArticlePrice(result.getDouble("ArticlePrice1"));
-				fetchedOrder.setArticle1(a1);
+				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
 				fetchedOrder.setOrderId(result.getInt("orderId"));
 				fetchedOrder.setCustomerId(result.getInt("customerId"));
+				fetchedOrder.setInvoice(result.getBoolean("invoice"));
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -78,15 +67,10 @@ public class OrderDAO {
 				prep.setInt(1, order.getCustomerId());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getInt("OrderId") + " " + result.getString("articleName1"));
-				Article a1 = new Article();
-				a1.setArticleId(result.getInt("articleId1"));
-				a1.setArticleName(result.getString("articleName1"));
-				a1.setArticleAmount(result.getInt("ArticleAmount1"));
-				a1.setArticlePrice(result.getDouble("ArticlePrice1"));
-				fetchedOrder.setArticle1(a1);
+				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
 				fetchedOrder.setOrderId(result.getInt("orderId"));
 				fetchedOrder.setCustomerId(result.getInt("customerId"));
+				fetchedOrder.setInvoice(result.getBoolean("invoice"));
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -94,23 +78,67 @@ public class OrderDAO {
 			
 			return fetchedOrder;
 		}
-		//update
-		public void changeArticle(Order order) {
+		
+		public Order findOrderWithInvoice(Order order) {
 			try {
-				prep = connection.prepareStatement("update Orders set articleId1 = ?, articleName1 = ?, articleAmount1 = ?," + 
-				"articlePrice1 = ? where OrderId = ?");
-				prep.setInt(1, order.getArticle1().getArticleId());
-				prep.setString(2, order.getArticle1().getArticleName());
-				prep.setInt(3, order.getArticle1().getArticleAmount());
-				prep.setDouble(4, order.getArticle1().getArticlePrice());
-				prep.setInt(5, order.getOrderId());
+				prep = connection.prepareStatement("select * from Orders where invoice = ?");
+				prep.setBoolean(1, order.isInvoice());
+				result = prep.executeQuery();
+				result.last();
+				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
+				fetchedOrder.setOrderId(result.getInt("orderId"));
+				fetchedOrder.setCustomerId(result.getInt("customerId"));
+				fetchedOrder.setInvoice(result.getBoolean("invoice"));
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			return fetchedOrder;
+		}
+		
+		//update
+		public void addArticle(Article article, Order order) {
+			try {
+				prep = connection.prepareStatement("insert into OrdersArticle (articleId, articleAmount,OrderId)" + 
+				"values (?,?,?)");
+				prep.setInt(1, article.getArticleId());
+				prep.setInt(2, article.getArticleAmount());
+				prep.setInt(3, order.getOrderId());
 				prep.executeUpdate();
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
 			}
-			System.out.println("Article has been changed.");
+			System.out.println("Article has been added.");
 		}
+		
+		public void setArticleAmount(Article article, Order order) {
+			try {
+				prep = connection.prepareStatement("update OrdersArticle set articleAmount = ? where articleId = ? and orderId = ?");
+				prep.setInt(1, article.getArticleAmount());
+				prep.setInt(2, article.getArticleId());
+				prep.setInt(3, order.getOrderId());
+				prep.executeUpdate();
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Article amount has been changed.");
+		}
+		public void setInvoice(Order order) {
+			try {
+				prep = connection.prepareStatement("update Orders set invoice = ? where orderId = ?");
+				prep.setBoolean(1, order.isInvoice());
+				prep.setInt(2, order.getOrderId());
+				prep.executeUpdate();
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Payment has been changed.");
+		}
+		
 		//delete
 		public void removeOrderWithId(Order order) {
 			try {

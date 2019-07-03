@@ -3,6 +3,7 @@ public class Article {
 	private int articleId;
 	private String articleName;
 	private double articlePrice;
+	private int articleStock;
 	private int articleAmount;
 	
 	public int getArticleId() {
@@ -27,6 +28,14 @@ public class Article {
 	
 	public void setArticlePrice(double price) {
 		this.articlePrice = price;
+	}
+	
+	public int getArticleStock() {
+		return articleStock;
+	}
+	
+	public void setArticleStock(int stock) {
+		this.articleStock = stock;
 	}
 	
 	public int getArticleAmount() {
