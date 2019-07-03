@@ -1,7 +1,7 @@
 
 public interface CustomerDAOInterface {
 	//create
-	public abstract void newCustomer(Customer newCustomer);
+	public abstract void createCustomer(Customer newCustomer);
 	
 	//read
 	public abstract Customer findCustomerWithId(int id);
@@ -11,7 +11,6 @@ public interface CustomerDAOInterface {
 	
 	//update
 	public abstract void setCustomerFullName(Customer customer);
-	public abstract void setCustomerAddress(Customer customer);
 	public abstract void setCustomerEmail(Customer customer);
 	
 	//delete

@@ -10,45 +10,30 @@ public class CustomerDAO implements CustomerDAOInterface {
 	public static void main(String[] args) {
 		CustomerDAO tryout = new CustomerDAO();
 		Customer vroomer = new Customer();
-		Address address = new Address();
-		address.setStreetname("vroomRoad");
-		address.setHouseNumber(5);
-		address.setPostalCode("9876SB");
-		address.setPlaceOfResidence("DriveTown");
-		vroomer.setAddress(address);
 		vroomer.setFirstName("Kangoo");
 		vroomer.setLastName("Renault");
 		vroomer.setEmailAddress("jumpyjumpjump@hotmail.com");
-		tryout.newCustomer(vroomer);
+		tryout.createCustomer(vroomer);
 		/*System.out.println("Customer has been succesfully added.");
 		Customer tester = new Customer();
-		Address testing = new Address();
 		tester.setCustomerId(2);
 		tester.setFirstName("Kangoo");
 		tester.setLastName("Renault");
 		tester.setEmailAddress("vroomvromvromvroom@gmail.com");
-		testing.setStreetname("Putterstreet");
-		testing.setHouseNumber(2);
-		testing.setPlaceOfResidence("Cruise City");
-		testing.setPostalCode("1234ET");
-		tester.setAddress(testing);
 		
 		tryout.deleteCustomerWithFullName(tester);
 		*/
 	}
 	
 	//create
-			public void newCustomer(Customer newCustomer) {
-				try{	prep = connection.prepareStatement("insert into Customer (firstName, lastName, email, streetName," +
-					   "houseNumber, postalCode, residence) values (?, ?, ?, ?, ?, ?, ?)");
+			public void createCustomer(Customer newCustomer) {
+				try{	prep = connection.prepareStatement("insert into Customer (firstName, lastName, email) values" +
+						"(?, ?, ?)");
 				prep.setString(1, newCustomer.getFirstName());
 				prep.setString(2, newCustomer.getLastName());
 				prep.setString(3, newCustomer.getEmailAddress());
-				prep.setString(4, newCustomer.getAddress().getStreetname());
-				prep.setInt(5, newCustomer.getAddress().getHouseNumber());
-				prep.setString(6, newCustomer.getAddress().getPostalCode());
-				prep.setString(7, newCustomer.getAddress().getPlaceOfResidence());
 				prep.executeUpdate();
+				System.out.println("Customer has been added.");
 				}
 				catch(SQLException ex) {
 					ex.printStackTrace();
@@ -145,21 +130,7 @@ public class CustomerDAO implements CustomerDAOInterface {
 				ex.printStackTrace();
 			}
 		}
-		public void setCustomerAddress(Customer customer) {
-			try {
-				prep = connection.prepareStatement("update Customer set streetName = ?, houseNumber = ?, postalCode = ?, residence = ? where Customerid = ?");
-				prep.setString(1, customer.getAddress().getStreetname());
-				prep.setInt(2, customer.getAddress().getHouseNumber());
-				prep.setString(3, customer.getAddress().getPostalCode());
-				prep.setString(4, customer.getAddress().getPlaceOfResidence());
-				prep.setInt(5, customer.getCustomerId());
-				prep.executeUpdate();
-				System.out.println("Address has been updated");
-			}
-			catch(SQLException ex) {
-				ex.printStackTrace();
-			}
-		}
+
 		public void setCustomerEmail(Customer customer) {
 			try {
 				prep = connection.prepareStatement("update Customer set email = ? where Customerid = ?");
