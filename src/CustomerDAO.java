@@ -6,25 +6,6 @@ public class CustomerDAO implements CustomerDAOInterface {
 	ResultSet result;
 	Customer found = new Customer();
 	
-	
-	public static void main(String[] args) {
-		CustomerDAO tryout = new CustomerDAO();
-		Customer vroomer = new Customer();
-		vroomer.setFirstName("Kangoo");
-		vroomer.setLastName("Renault");
-		vroomer.setEmailAddress("jumpyjumpjump@hotmail.com");
-		tryout.createCustomer(vroomer);
-		/*System.out.println("Customer has been succesfully added.");
-		Customer tester = new Customer();
-		tester.setCustomerId(2);
-		tester.setFirstName("Kangoo");
-		tester.setLastName("Renault");
-		tester.setEmailAddress("vroomvromvromvroom@gmail.com");
-		
-		tryout.deleteCustomerWithFullName(tester);
-		*/
-	}
-	
 	//create
 			public void createCustomer(Customer newCustomer) {
 				try{	prep = connection.prepareStatement("insert into Customer (firstName, lastName, email) values" +

@@ -6,30 +6,6 @@ public class OrderDAO {
 	ResultSet result;
 	Order fetchedOrder = new Order();
 
-	
-	public static void main(String[] args) {
-		OrderDAO tryout = new OrderDAO();
-		Order order = new Order();
-		order.setCustomerId(1);
-		order.setOrderId(2);
-		order.setInvoice(true);
-		Article article1 = new Article();
-		article1.setArticleId(1);
-		article1.setArticleName("TurtleWax");
-		article1.setArticleAmount(1);
-		article1.setArticlePrice(5.95);
-		Order testing = new Order();
-		testing.setOrderId(2);
-		testing.setCustomerId(1);
-		Article a2 = new Article();
-		a2.setArticleId(1);
-		a2.setArticleName("Car shampoo");
-		a2.setArticleAmount(2);
-		a2.setArticlePrice(7.9);
-
-		//tryout.createOrder(order);
-		tryout.removeOrderWithId(order);
-	}
 	//create
 		public void createOrder(Order order) {
 			try {

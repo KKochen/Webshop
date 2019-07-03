@@ -9,29 +9,6 @@ public class AddressDAO implements AddressDAOInterface {
 	ResultSet result;
 	Address found = new Address();
 	
-	public static void main(String[] args) {
-		AddressDAO tryout = new AddressDAO();
-		Customer customer = new Customer();
-		customer.setCustomerId(1);
-		customer.setLastName("Renault");
-		customer.setFirstName("Kangoo");
-		Address address = new Address();
-		address.setStreetname("Engine Road");
-		address.setHouseNumber(7);
-		address.setAddition("a");
-		address.setPostalCode("0275GH");
-		address.setPlaceOfResidence("ChryslerTown");
-		Address tester = new Address();
-		tester.setAddressId(3);
-		tester.setStreetname("Clutch lane");
-		tester.setHouseNumber(10);
-		tester.setPostalCode("9265PX");
-		tester.setPlaceOfResidence("Cruise City");
-		
-		//tryout.createAddress(address,customer);
-		tryout.removeAddressWithAddressId(tester);
-	}
-	
 	//create
 	public void createAddress(Address address, Customer customer) {
 		try {

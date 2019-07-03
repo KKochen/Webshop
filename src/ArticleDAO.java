@@ -6,22 +6,6 @@ public class ArticleDAO implements ArticleDAOInterface{
 	ResultSet result;
 	Article found = new Article();
 	
-	public static void main(String[] args) {
-		ArticleDAO tryout = new ArticleDAO();
-		Article a1 = new Article();
-		a1.setArticleName("Turtlewax");
-		a1.setArticleStock(25);
-		a1.setArticlePrice(5.95);
-		Article tester = new Article();
-		tester.setArticleId(1);
-		tester.setArticleName("Engine oil");
-		tester.setArticleAmount(75);
-		tester.setArticlePrice(15.95);
-		
-		tryout.createArticle(a1);
-		//tryout.removeArticleWithName(a1);
-	}
-	
 	//create
 	public void createArticle(Article article) {
 		try {
