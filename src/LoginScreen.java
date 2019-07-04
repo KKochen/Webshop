@@ -20,18 +20,19 @@ public class LoginScreen {
 			if(keepGoing.equals("y")) {
 				break;
 			}
+			/*
 			System.out.print("Please enter your username: ");
 			username = input.nextLine();
 			System.out.print("Please enter your password: ");
 			password = input.nextLine();
 			
-			if(username.equals("admin") && password.equals("TreeDancer")) {
+			if(username.equals("admin") && password.equals("TreeDancer")) {*/
 				MainMenu mainmenu = new MainMenu();
 				mainmenu.loadMenu();
-			}
+			/*}
 			else {
 				System.out.println("You have entered an incorrect combination of username and password. Please try again.");
-			}
+			}*/
 		} while(passwordCorrect);
 	}
 }

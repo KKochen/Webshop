@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 	Scanner input = new Scanner(System.in);
-	CustomerMenu customerMenu = new CustomerMenu(); 
+	CustomerMenu customerMenu = new CustomerMenu();
+	AddressMenu addressMenu = new AddressMenu();
 	boolean keepWorking = true;
 	
 	public void loadMenu() {		
@@ -14,7 +15,7 @@ public class MainMenu {
 			
 			switch(choice) {
 			case 1: customerMenu.loadMenu(); break;
-			case 2: ;break;
+			case 2: addressMenu.loadMenu(); break;
 			case 3: ;break;
 			case 4: ;break;
 			case 5: ;break;

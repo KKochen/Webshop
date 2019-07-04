@@ -12,14 +12,26 @@ public class AddressDAO implements AddressDAOInterface {
 	//create
 	public void createAddress(Address address, Customer customer) {
 		try {
-			prep = connection.prepareStatement("insert into Address (customerId,streetName, houseNumber, addition, postalCode," + 
-			"residence) values (?, ?, ?, ?, ?, ?)");
+			prep = connection.prepareStatement("insert into Address (streetName, houseNumber, addition, postalCode," + 
+			"residence) values (?, ?, ?, ?, ?)");
+			prep.setString(1, address.getStreetname());
+			prep.setInt(2, address.getHouseNumber());
+			prep.setString(3, address.getAddition());
+			prep.setString(4, address.getPostalCode());
+			prep.setString(5, address.getPlaceOfResidence());
+			prep.executeUpdate();
+			prep = connection.prepareStatement("select addressId from Address where streetName = ? and houseNumber = ?" +
+			" and addition = ? and postalCode = ? and residence = ?");
+			prep.setString(1, address.getStreetname());
+			prep.setInt(2, address.getHouseNumber());
+			prep.setString(3, address.getAddition());
+			prep.setString(4, address.getPostalCode());
+			prep.setString(5, address.getPlaceOfResidence());
+			result = prep.executeQuery();
+			result.last();
+			prep = connection.prepareStatement("insert into CustomerAddress (customerId, addressId) values (?,?)");
 			prep.setInt(1, customer.getCustomerId());
-			prep.setString(2, address.getStreetname());
-			prep.setInt(3, address.getHouseNumber());
-			prep.setString(4, address.getAddition());
-			prep.setString(5, address.getPostalCode());
-			prep.setString(6, address.getPlaceOfResidence());
+			prep.setInt(2, result.getInt("addressId"));
 			prep.executeUpdate();
 			System.out.println("Address has been added.");
 		}
@@ -29,10 +41,10 @@ public class AddressDAO implements AddressDAOInterface {
 		}
 	}
 	
-	//read
+	//read SELECT name, price, photo FROM drinks, drinks_photos WHERE drinks.id = drinks_id
 	public Address findAddressWithCustomerId(Customer customer) {
 		try {
-		prep = connection.prepareStatement("select * from Address where customerId = ?");
+		prep = connection.prepareStatement("select * from Address,CustomerAddress where customerId = ? and Address.addressId = CustomerAddress.addressId");
 		prep.setInt(1, customer.getCustomerId());
 		result = prep.executeQuery();
 		result.last();
@@ -46,15 +58,18 @@ public class AddressDAO implements AddressDAOInterface {
 		
 		catch(SQLException ex) {
 			ex.printStackTrace();
-		}
-		System.out.println(found.getStreetname() + " " + found.getPlaceOfResidence());
-		
+		}		
 		return found;
 	}
 	public Address findAddressWithLastName(Customer customer) {
 		try {
-			prep = connection.prepareStatement("select * from Address inner join Customer on Customer.customerId where lastName = ?");
-			prep.setString(1, customer.getLastName());
+			prep = connection.prepareStatement("select customerId from Customer where lastName = ?");
+			prep.setString(1,customer.getLastName());
+			result = prep.executeQuery();
+			result.last();
+			customer.setCustomerId(result.getInt("customerId"));
+			prep = connection.prepareStatement("select * from Address,CustomerAddress where customerId = ? and Address.addressId = CustomerAddress.addressId");
+			prep.setInt(1, customer.getCustomerId());
 			result = prep.executeQuery();
 			result.last();
 			found.setStreetname(result.getString("streetName"));
@@ -68,14 +83,19 @@ public class AddressDAO implements AddressDAOInterface {
 			catch(SQLException ex) {
 				ex.printStackTrace();
 			}
-			System.out.println(found.getStreetname() + " " + found.getPlaceOfResidence());
 			return found;
 	}
 	public Address findAddresWithFullName(Customer customer) {
 		try {
-			prep = connection.prepareStatement("select * from Address inner join Customer on Customer.customerId where firstName = ? and lastName = ?");
+			prep = connection.prepareStatement("select customerId from Customer where firstName = ? and lastName = ?");
 			prep.setString(1, customer.getFirstName());
+			//prep.setString(2, customer.getMiddleName());
 			prep.setString(2, customer.getLastName());
+			result = prep.executeQuery();
+			result.last();
+			customer.setCustomerId(result.getInt("customerId"));
+			prep = connection.prepareStatement("select * from Address,CustomerAddress where customerId = ? and Address.addressId = CustomerAddress.addressId");
+			prep.setInt(1, customer.getCustomerId());
 			result = prep.executeQuery();
 			result.last();
 			found.setStreetname(result.getString("streetName"));
