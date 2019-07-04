@@ -13,7 +13,7 @@ public class AddressMenu {
 		do {
 			System.out.println("	#### ADDRESS MENU ####\n	(1) Add an address\n	(2) Find an address with the" +
 			" customers id\n" +	"	(3) Find an address with the customers last name \n	(4) Find an address with the" +
-			" full name \n	(5) Change an address \n	(6) Delete an address\n	(0) Return to Main menu\n\n");
+			" full name \n	(5) Change an address \n	(6) Delete a customers address\n	(7) Delete an address\n	(0) Return to Main menu\n\n");
 			System.out.print("Please enter the number of your choice: ");
 			int choice = input.nextInt();
 		
@@ -23,7 +23,8 @@ public class AddressMenu {
 			case 3: menu.findAddressByLastName(); break;
 			case 4: menu.findAddressByFullName();break;
 			case 5: menu.changeAddress();break;
-			case 6: menu.deleteAddress();break;
+			case 6: menu.deleteAddressByCustomerId();break;
+			case 7: menu.deleteAddress();break;
 			case 0: System.out.println("Leaving Customer Menu and returning to the Main Menu"); keepWorking = false;
 			}
 		} while(keepWorking);
@@ -112,7 +113,28 @@ public class AddressMenu {
 		dao.changeFullAddress(query, customer);
 	}
 	
+	public void deleteAddressByCustomerId() {
+		System.out.print("Please enter the customers Id number: ");
+		customer.setCustomerId(input.nextInt());
+		input.nextLine();
+		System.out.print("Please enter the streetname: ");
+		query.setStreetname(input.nextLine());
+		System.out.print("Please enter the house number: ");
+		query.setHouseNumber(input.nextInt());
+		input.nextLine();
+		System.out.print("Please enter the addition. If there is none, enter a space: ");
+		query.setAddition(input.nextLine());
+		System.out.print("Please enter the postal code: ");
+		query.setPostalCode(input.nextLine());
+		System.out.print("Please enter the place of residence: ");
+		query.setPlaceOfResidence(input.nextLine());
+		dao.removeAddressWithBothIds(query, customer);
+	}
+	
 	public void deleteAddress() {
+		System.out.println("Please enter the address Id number: ");
+		query.setAddressId(input.nextInt());
+		input.nextLine();
 		dao.removeAddressWithAddressId(query);
 	}
 }
