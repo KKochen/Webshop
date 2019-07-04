@@ -12,28 +12,30 @@ public class AddressDAO implements AddressDAOInterface {
 	//create
 	public void createAddress(Address address, Customer customer) {
 		try {
-			prep = connection.prepareStatement("insert into Address (streetName, houseNumber, addition, postalCode," + 
-			"residence) values (?, ?, ?, ?, ?)");
+			prep = connection.prepareStatement("select addressId from Address where streetname = ? and houseNumber = ? and " +
+					"postalCode = ? and residence = ?");
 			prep.setString(1, address.getStreetname());
 			prep.setInt(2, address.getHouseNumber());
-			prep.setString(3, address.getAddition());
-			prep.setString(4, address.getPostalCode());
-			prep.setString(5, address.getPlaceOfResidence());
-			prep.executeUpdate();
-			prep = connection.prepareStatement("select addressId from Address where streetName = ? and houseNumber = ?" +
-			" and addition = ? and postalCode = ? and residence = ?");
-			prep.setString(1, address.getStreetname());
-			prep.setInt(2, address.getHouseNumber());
-			prep.setString(3, address.getAddition());
-			prep.setString(4, address.getPostalCode());
-			prep.setString(5, address.getPlaceOfResidence());
+			prep.setString(3, address.getPostalCode());
+			prep.setString(4, address.getPlaceOfResidence());
 			result = prep.executeQuery();
-			result.last();
-			prep = connection.prepareStatement("insert into CustomerAddress (customerId, addressId) values (?,?)");
-			prep.setInt(1, customer.getCustomerId());
-			prep.setInt(2, result.getInt("addressId"));
-			prep.executeUpdate();
-			System.out.println("Address has been added.");
+			if(!result.next()) {
+				prep = connection.prepareStatement("insert into Address (streetName, houseNumber, addition, postalCode," + 
+					"residence) values (?, ?, ?, ?, ?)");
+				prep.setString(1, address.getStreetname());
+				prep.setInt(2, address.getHouseNumber());
+				prep.setString(3, address.getAddition());
+				prep.setString(4, address.getPostalCode());
+				prep.setString(5, address.getPlaceOfResidence());
+				prep.executeUpdate();
+			}
+			else {
+				prep = connection.prepareStatement("insert into CustomerAddress (customerId, addressId) values (?,?)");
+				prep.setInt(1, customer.getCustomerId());
+				prep.setInt(2, result.getInt("addressId"));
+				prep.executeUpdate();
+				System.out.println("Address has been added.");
+			}
 		}
 		
 		catch (SQLException ex) {
@@ -114,18 +116,63 @@ public class AddressDAO implements AddressDAOInterface {
 	}
 	
 	//update
-	public void changeFullAddress(Address address) {
+	public void changeFullAddress(Address address, Customer customer) {
+		Address old = new Address();
+		Address newOne = new Address();
 		try {
-		prep = connection.prepareStatement("update Address set streetName = ?, houseNumber = ?, addition = ?," +
-		"postalCode = ?, residence = ? where addressId = ?");
-		prep.setString(1, address.getStreetname());
-		prep.setInt(2, address.getHouseNumber());
-		prep.setString(3, address.getAddition());
-		prep.setString(4, address.getPostalCode());
-		prep.setString(5, address.getPlaceOfResidence());
-		prep.setInt(6, address.getAddressId());
-		prep.executeUpdate();
-		System.out.println("Address has been changed.");
+			prep = connection.prepareStatement("select addressId from Address where streetname = ? and houseNumber = ? and " +
+					"postalCode = ? and residence = ?");
+			prep.setString(1, address.getStreetname());
+			prep.setInt(2, address.getHouseNumber());
+			prep.setString(3, address.getPostalCode());
+			prep.setString(4, address.getPlaceOfResidence());
+			result = prep.executeQuery();
+			if(!result.next()) {
+				prep = connection.prepareStatement("insert into Address (streetName, houseNumber, addition, postalCode," + 
+				"residence) values (?, ?, ?, ?, ?)");
+				prep.setString(1, address.getStreetname());
+				prep.setInt(2, address.getHouseNumber());
+				prep.setString(3, address.getAddition());
+				prep.setString(4, address.getPostalCode());
+				prep.setString(5, address.getPlaceOfResidence());
+				prep.executeUpdate();
+				prep = connection.prepareStatement("select addressId from Address where streetName = ? and houseNumber = ?" +
+				" and addition = ? and postalCode = ? and residence = ?");
+				prep.setString(1, address.getStreetname());
+				prep.setInt(2, address.getHouseNumber());
+				prep.setString(3, address.getAddition());
+				prep.setString(4, address.getPostalCode());
+				prep.setString(5, address.getPlaceOfResidence());
+				result = prep.executeQuery();
+				result.last();
+				newOne.setAddressId(result.getInt("addressId"));
+				prep = connection.prepareStatement("select * from CustomerAddress where customerId = ? and addressId = ?");
+				prep.setInt(1, customer.getCustomerId());
+				prep.setInt(2, result.getInt("addressId"));
+				result = prep.executeQuery();
+			}
+			else {//need to implement "Which address do you want to change? " need the customers old address for this to work
+				old.setAddressId(result.getInt("addressId"));
+				prep = connection.prepareStatement("select * from CustomerAddress where customerId = ? and addressId = ?");
+				prep.setInt(1, customer.getCustomerId());
+				prep.setInt(2, old.getAddressId());
+				result = prep.executeQuery();
+				
+				if(!result.next()) {
+					prep = connection.prepareStatement("insert into CustomerAddress (addressId,CustomerId) values (?,?)");
+					prep.setInt(1, newOne.getAddressId());
+					prep.setInt(2, customer.getCustomerId());
+					prep.executeUpdate();
+				}
+				else {
+					prep = connection.prepareStatement("update CustomerAddress set addressId = ? where CustomerId = ?");
+					prep.setInt(1, result.getInt("addressId"));
+					prep.setInt(2, customer.getCustomerId());
+					prep.executeUpdate();
+				}
+			}
+			
+			System.out.println("Address has been changed.");
 		}
 		
 		catch(SQLException ex) {
@@ -135,6 +182,10 @@ public class AddressDAO implements AddressDAOInterface {
 	}
 	
 	//delete
+	public void removeAddressWithBothIds(Address address, Customer customer) {
+		
+	}
+	
 	public void removeAddressWithAddressId(Address address) {
 		try {
 			prep = connection.prepareStatement("delete from Address where addressId = ?");

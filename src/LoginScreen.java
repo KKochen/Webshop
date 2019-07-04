@@ -12,7 +12,6 @@ public class LoginScreen {
 	
 	public void startWebshop() {
 		boolean passwordCorrect = true;
-		
 		do {
 			System.out.print("Do you wish to quit the program? Enter y or n: ");
 			String keepGoing = input.nextLine();

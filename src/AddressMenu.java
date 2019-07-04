@@ -6,7 +6,6 @@ public class AddressMenu {
 	AddressDAO dao = new AddressDAO();
 	Address retrieved = new Address();
 	Address query = new Address();
-	Address address = new Address();
 	Customer customer = new Customer();
 	
 	public void loadMenu() {
@@ -96,10 +95,24 @@ public class AddressMenu {
 	}
 	
 	public void changeAddress() {
-		dao.changeFullAddress(address);
+		System.out.print("Please enter the customers Id number: ");
+		customer.setCustomerId(input.nextInt());
+		input.nextLine();
+		System.out.print("Please enter the streetname: ");
+		query.setStreetname(input.nextLine());
+		System.out.print("Please enter the house number: ");
+		query.setHouseNumber(input.nextInt());
+		input.nextLine();
+		System.out.print("Please enter the addition. If there is none, enter a space: ");
+		query.setAddition(input.nextLine());
+		System.out.print("Please enter the postal code: ");
+		query.setPostalCode(input.nextLine());
+		System.out.print("Please enter the place of residence: ");
+		query.setPlaceOfResidence(input.nextLine());
+		dao.changeFullAddress(query, customer);
 	}
 	
 	public void deleteAddress() {
-		dao.removeAddressWithAddressId(address);
+		dao.removeAddressWithAddressId(query);
 	}
 }

@@ -9,8 +9,9 @@ public interface AddressDAOInterface {
 	public abstract Address findAddresWithFullName(Customer customer);
 	
 	//update
-	public abstract void changeFullAddress(Address address);
+	public abstract void changeFullAddress(Address address, Customer customer);
 	
 	//delete
+	public abstract void removeAddressWithBothIds(Address address, Customer customer);
 	public abstract void removeAddressWithAddressId(Address address);
 }
