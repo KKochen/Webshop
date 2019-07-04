@@ -5,9 +5,9 @@ public interface CustomerDAOInterface {
 	
 	//read
 	public abstract Customer findCustomerWithId(int id);
-	public abstract Customer findCustomerWithLastName(String lastName);
-	public abstract Customer findCustomerWithFullName(String fullName, String lastName);
-	public abstract Customer findCustomerWithEmail(String email);
+	public abstract Customer findCustomerWithLastName(Customer customer);
+	public abstract Customer findCustomerWithFullName(Customer customer);
+	public abstract Customer findCustomerWithEmail(Customer customer);
 	
 	//update
 	public abstract void setCustomerFullName(Customer customer);

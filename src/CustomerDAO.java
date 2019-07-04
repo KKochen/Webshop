@@ -28,7 +28,6 @@ public class CustomerDAO implements CustomerDAOInterface {
 			prep.setInt(1, id);
 			result = prep.executeQuery();
 			result.last();
-			System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
 			found.setFirstName(result.getString("firstName"));
 			found.setLastName(result.getString("lastName"));
 			found.setCustomerId(result.getInt("customerId"));
@@ -40,13 +39,12 @@ public class CustomerDAO implements CustomerDAOInterface {
 		
 		return found;
 	}
-		public Customer findCustomerWithLastName(String lastName) {
+		public Customer findCustomerWithLastName(Customer customer) {
 			try {
 				prep = connection.prepareStatement("select * from Customer where lastName = ?");
-				prep.setString(1, lastName);
+				prep.setString(1, customer.getLastName());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
 				found.setFirstName(result.getString("firstName"));
 				found.setLastName(result.getString("lastName"));
 				found.setCustomerId(result.getInt("customerId"));
@@ -58,14 +56,13 @@ public class CustomerDAO implements CustomerDAOInterface {
 			
 			return found;
 		}
-		public Customer findCustomerWithFullName(String firstName, String lastName) {
+		public Customer findCustomerWithFullName(Customer customer) {
 			try {
 				prep = connection.prepareStatement("select * from Customer where firstName = ? and lastName = ?");
-				prep.setString(1, firstName);
-				prep.setString(2, lastName);
+				prep.setString(1, customer.getFirstName());
+				prep.setString(2, customer.getLastName());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
 				found.setFirstName(result.getString("firstName"));
 				found.setLastName(result.getString("lastName"));
 				found.setCustomerId(result.getInt("customerId"));
@@ -77,13 +74,12 @@ public class CustomerDAO implements CustomerDAOInterface {
 			
 			return found;
 		}
-		public Customer findCustomerWithEmail(String email) {
+		public Customer findCustomerWithEmail(Customer customer) {
 			try {
 				prep = connection.prepareStatement("select * from Customer where email = ?");
-				prep.setString(1, email);
+				prep.setString(1, customer.getEmailAddress());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getString("firstName") + " " + result.getString("lastName"));
 				found.setFirstName(result.getString("firstName"));
 				found.setLastName(result.getString("lastName"));
 				found.setCustomerId(result.getInt("customerId"));
@@ -105,7 +101,8 @@ public class CustomerDAO implements CustomerDAOInterface {
 				prep.setString(3, customer.getLastName());
 				prep.setInt(4, customer.getCustomerId());
 				prep.executeUpdate();
-				System.out.println("Name has been updated.");
+				System.out.println("Name has been updated. Customer with Id number: " + customer.getCustomerId() + " is" +
+				" now called: " + customer.getFirstName() + " " + customer.getMiddleName() + " " + customer.getLastName());
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -118,7 +115,8 @@ public class CustomerDAO implements CustomerDAOInterface {
 				prep.setString(1, customer.getEmailAddress());
 				prep.setInt(2, customer.getCustomerId());
 				prep.executeUpdate();
-				System.out.println("Email has been updated.");
+				System.out.println("Email has been updated. Customer with Id number: " + customer.getCustomerId() + " now " +
+				"has email address " + customer.getEmailAddress());
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();

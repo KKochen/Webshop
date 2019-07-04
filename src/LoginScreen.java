@@ -14,13 +14,18 @@ public class LoginScreen {
 		boolean passwordCorrect = true;
 		
 		do {
+			System.out.print("Do you wish to quit the program? Enter y or n: ");
+			String keepGoing = input.nextLine();
+			
+			if(keepGoing.equals("y")) {
+				break;
+			}
 			System.out.print("Please enter your username: ");
 			username = input.nextLine();
 			System.out.print("Please enter your password: ");
 			password = input.nextLine();
 			
 			if(username.equals("admin") && password.equals("TreeDancer")) {
-				passwordCorrect = false;
 				MainMenu mainmenu = new MainMenu();
 				mainmenu.loadMenu();
 			}
