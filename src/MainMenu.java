@@ -5,6 +5,7 @@ public class MainMenu {
 	CustomerMenu customerMenu = new CustomerMenu();
 	AddressMenu addressMenu = new AddressMenu();
 	OrdersMenu ordersMenu = new OrdersMenu();
+	ArticleMenu articleMenu = new ArticleMenu();
 	boolean keepWorking = true;
 	
 	public void loadMenu() {		
@@ -18,7 +19,7 @@ public class MainMenu {
 			case 1: customerMenu.loadMenu(); break;
 			case 2: addressMenu.loadMenu(); break;
 			case 3: ordersMenu.loadMenu();break;
-			case 4: ;break;
+			case 4: articleMenu.loadMenu();break;
 			case 5: ;break;
 			case 6: System.out.println("Logging out.");keepWorking = false;
 			}			

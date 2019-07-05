@@ -9,11 +9,11 @@ public class ArticleDAO implements ArticleDAOInterface{
 	//create
 	public void createArticle(Article article) {
 		try {
-			prep = connection.prepareStatement("insert into Article (articleName, articlePrice, articleAmount)" +
+			prep = connection.prepareStatement("insert into Article (articleName, articlePrice, articleStock)" +
 			"values (?, ?, ?)");
 			prep.setString(1, article.getArticleName());
 			prep.setDouble(2, article.getArticlePrice());
-			prep.setInt(3, article.getArticleAmount());
+			prep.setInt(3, article.getArticleStock());
 			prep.executeUpdate();
 			System.out.println("Article has been added.");
 		}
@@ -31,7 +31,7 @@ public class ArticleDAO implements ArticleDAOInterface{
 					result.last();
 					found.setArticleId(result.getInt("articleId"));
 					found.setArticleName(result.getString("articleName"));
-					found.setArticleAmount(result.getInt("articleAmount"));
+					found.setArticleStock(result.getInt("articleStock"));
 					found.setArticlePrice(result.getDouble("articlePrice"));
 					System.out.println(found.getArticleName() + " " + found.getArticlePrice());
 				}
@@ -49,7 +49,7 @@ public class ArticleDAO implements ArticleDAOInterface{
 					result.last();
 					found.setArticleId(result.getInt("articleId"));
 					found.setArticleName(result.getString("articleName"));
-					found.setArticleAmount(result.getInt("articleAmount"));
+					found.setArticleStock(result.getInt("articleStock"));
 					found.setArticlePrice(result.getDouble("articlePrice"));
 					System.out.println(found.getArticleName() + " " + found.getArticlePrice());
 				}
@@ -62,10 +62,10 @@ public class ArticleDAO implements ArticleDAOInterface{
 		//update
 			public void changeArticleWithId(Article article) {
 				try {
-					prep = connection.prepareStatement("update Article set articleName = ?, articleAmount = ?," + 
+					prep = connection.prepareStatement("update Article set articleName = ?, articleStock = ?," + 
 					"articlePrice = ? where articleId = ?");
 					prep.setString(1, article.getArticleName());
-					prep.setInt(2, article.getArticleAmount());
+					prep.setInt(2, article.getArticleStock());
 					prep.setDouble(3, article.getArticlePrice());
 					prep.setInt(4, article.getArticleId());
 					prep.executeUpdate();
@@ -78,10 +78,10 @@ public class ArticleDAO implements ArticleDAOInterface{
 			}
 			public void changeArticleWithName(Article article, String oldName) {
 				try {
-					prep = connection.prepareStatement("update Article set articleName = ?, articleAmount = ?," + 
+					prep = connection.prepareStatement("update Article set articleName = ?, articleStock = ?," + 
 					"articlePrice = ? where articleName = ?");
 					prep.setString(1, article.getArticleName());
-					prep.setInt(2, article.getArticleAmount());
+					prep.setInt(2, article.getArticleStock());
 					prep.setDouble(3, article.getArticlePrice());
 					prep.setString(4, oldName);
 					prep.executeUpdate();
