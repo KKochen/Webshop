@@ -25,7 +25,7 @@ public class AddressMenu {
 			case 5: menu.changeAddress();break;
 			case 6: menu.deleteAddressByCustomerId();break;
 			case 7: menu.deleteAddress();break;
-			case 0: System.out.println("Leaving Customer Menu and returning to the Main Menu"); keepWorking = false;
+			case 0: System.out.println("Leaving Address Menu and returning to the Main Menu"); keepWorking = false;
 			}
 		} while(keepWorking);
 	}

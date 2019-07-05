@@ -2,7 +2,7 @@
 public class Order {
 	private int orderId;
 	private int customerId;
-	private boolean invoice;
+	private int invoiceId;
 	private int articleId;
 	private int articleAmount;
 
@@ -22,12 +22,12 @@ public class Order {
 		this.customerId = id;
 	}
 	
-	public boolean isInvoice() {
-		return invoice;
+	public int getInvoiceId() {
+		return invoiceId;
 	}
 	
-	public void setInvoice(boolean invoice) {
-		this.invoice = invoice;
+	public void setInvoiceId(int invoice) {
+		this.invoiceId = invoice;
 	}
 	
 	public int getArticleAmount() {

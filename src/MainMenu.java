@@ -4,6 +4,7 @@ public class MainMenu {
 	Scanner input = new Scanner(System.in);
 	CustomerMenu customerMenu = new CustomerMenu();
 	AddressMenu addressMenu = new AddressMenu();
+	OrdersMenu ordersMenu = new OrdersMenu();
 	boolean keepWorking = true;
 	
 	public void loadMenu() {		
@@ -16,7 +17,7 @@ public class MainMenu {
 			switch(choice) {
 			case 1: customerMenu.loadMenu(); break;
 			case 2: addressMenu.loadMenu(); break;
-			case 3: ;break;
+			case 3: ordersMenu.loadMenu();break;
 			case 4: ;break;
 			case 5: ;break;
 			case 6: System.out.println("Logging out.");keepWorking = false;

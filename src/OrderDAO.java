@@ -1,6 +1,7 @@
 import java.sql.*;
+import java.util.ArrayList;
 
-public class OrderDAO {
+public class OrderDAO implements OrderDAOInterface {
 	Connection connection = DBConnector.getConnection();
 	PreparedStatement prep;
 	ResultSet result;
@@ -9,9 +10,8 @@ public class OrderDAO {
 	//create
 		public void createOrder(Order order) {
 			try {
-				prep = connection.prepareStatement("insert into Orders (customerId, invoice) values (?, ?)");
+				prep = connection.prepareStatement("insert into Orders (customerId) values (?)");
 				prep.setInt(1, order.getCustomerId());
-				prep.setBoolean(2, order.isInvoice());
 				prep.executeUpdate();
 				System.out.println("Order has been created.");
 				}
@@ -26,10 +26,9 @@ public class OrderDAO {
 				prep.setInt(1, order.getOrderId());
 				result = prep.executeQuery();
 				result.last();
-				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
 				fetchedOrder.setOrderId(result.getInt("orderId"));
 				fetchedOrder.setCustomerId(result.getInt("customerId"));
-				fetchedOrder.setInvoice(result.getBoolean("invoice"));
+				fetchedOrder.setInvoiceId(result.getInt("invoiceId"));
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -46,7 +45,7 @@ public class OrderDAO {
 				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
 				fetchedOrder.setOrderId(result.getInt("orderId"));
 				fetchedOrder.setCustomerId(result.getInt("customerId"));
-				fetchedOrder.setInvoice(result.getBoolean("invoice"));
+				fetchedOrder.setInvoiceId(result.getInt("invoiceId"));
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -57,14 +56,14 @@ public class OrderDAO {
 		
 		public Order findOrderWithInvoice(Order order) {
 			try {
-				prep = connection.prepareStatement("select * from Orders where invoice = ?");
-				prep.setBoolean(1, order.isInvoice());
+				prep = connection.prepareStatement("select * from Orders where invoiceId = ?");
+				prep.setInt(1, order.getInvoiceId());
 				result = prep.executeQuery();
 				result.last();
 				System.out.println(result.getInt("OrderId") + " " + result.getInt("customerId"));
 				fetchedOrder.setOrderId(result.getInt("orderId"));
 				fetchedOrder.setCustomerId(result.getInt("customerId"));
-				fetchedOrder.setInvoice(result.getBoolean("invoice"));
+				fetchedOrder.setInvoiceId(result.getInt("invoiceId"));
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
@@ -89,6 +88,10 @@ public class OrderDAO {
 			System.out.println("Article has been added.");
 		}
 		
+		public void addArticleList(ArrayList<Article> list,Order order) {
+			
+		}
+		
 		public void setArticleAmount(Article article, Order order) {
 			try {
 				prep = connection.prepareStatement("update OrdersArticle set articleAmount = ? where articleId = ? and orderId = ?");
@@ -102,10 +105,11 @@ public class OrderDAO {
 			}
 			System.out.println("Article amount has been changed.");
 		}
-		public void setInvoice(Order order) {
+		
+		/*public void setInvoice(Order order) {//this needs to go in the InvoiceDAO when it's made
 			try {
 				prep = connection.prepareStatement("update Orders set invoice = ? where orderId = ?");
-				prep.setBoolean(1, order.isInvoice());
+				prep.setInt(1, order.getInvoiceId());
 				prep.setInt(2, order.getOrderId());
 				prep.executeUpdate();
 			}
@@ -113,9 +117,22 @@ public class OrderDAO {
 				ex.printStackTrace();
 			}
 			System.out.println("Payment has been changed.");
-		}
+		}*/
 		
 		//delete
+		public void removeArticleWithId(Article article, Order order) {
+			try {
+				prep = connection.prepareStatement("delete from OrdersArticle where orderId = ? and articleId = ?");
+				prep.setInt(1, order.getOrderId());
+				prep.setInt(2, article.getArticleId());
+				prep.executeUpdate();
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+			}
+			System.out.println("Article has been deleted from Order.");
+		}
+		
 		public void removeOrderWithId(Order order) {
 			try {
 				prep = connection.prepareStatement("delete from Orders where orderId = ?");
