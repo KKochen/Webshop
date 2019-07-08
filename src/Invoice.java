@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Invoice {
 	private boolean paid;
 	private int invoiceId;
+	private int invoiceAddressId;
 	private ArrayList<Article> orderList = new ArrayList<>();
 	private double totalPayment;
 	
@@ -37,5 +38,13 @@ public class Invoice {
 	
 	public void setTotalPayment(double payment) {
 		this.totalPayment = payment;
+	}
+	
+	public int getInvoiceAddressId() {
+		return invoiceAddressId;
+	}
+	
+	public void setInvoiceAddressId(int id) {
+		this.invoiceAddressId = id;
 	}
 }
